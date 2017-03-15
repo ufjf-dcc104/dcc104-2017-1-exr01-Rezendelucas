@@ -21,14 +21,16 @@
         var anterior = new Date();    
         var dt = 1/fps;    
     
-        setInterval(desenha,1000/fps)    
+        desenha();    
             
         function desenha(){
+        requestAnimationFrame(desenha);    
         atual = new Date();
-        dt  = atual - anterior;   
+        dt  = (atual - anterior)/1000;   
         contexto.clearRect(0,0,eCanvas.width,eCanvas.height)
-        contexto.fillText("fps " + fps,10,30);
-        azul.x = azul.x + 10 * dt;
+        contexto.fillText("DT: "+ dt + "    FPS: " + Math.floor(1/dt),10,30);
+        azul.x = azul.x + 20 * dt;
+        azul.y = azul.y + 20 * dt;    
         desenhaAzul(contexto);
         desenhaVermelho(contexto);
         anterior = atual;
