@@ -8,23 +8,50 @@
         <h1>DCC104 - Exemplo 01</h1>
         <canvas></canvas>
         <script>
-         var eCanvas = document.getElementsByTagName("canvas")[0]; 
-         var contexto = eCanvas.getContext("2d");
+        var eCanvas = document.getElementsByTagName("canvas")[0]; 
+        var contexto = eCanvas.getContext("2d");
              
+        var azul = {
+            x:0,
+            y:50
+        };
             
-         contexto.fillText("Olá Mundo!",10,10);
+        var fps = 30;
+        var atual = new Date();
+        var anterior = new Date();    
+        var dt = 1/fps;    
+    
+        setInterval(desenha,1000/fps)    
             
+        function desenha(){
+        atual = new Date();
+        dt  = atual - anterior;   
+        contexto.clearRect(0,0,eCanvas.width,eCanvas.height)
+        contexto.fillText("fps " + fps,10,30);
+        azul.x = azul.x + 10 * dt;
+        desenhaAzul(contexto);
+        desenhaVermelho(contexto);
+        anterior = atual;
+        }    
             
-         contexto.fillStyle = "blue";
-         contexto.fillRect(20,50,15,15);
-         contexto.strokeRect(20,50,15,15);
-         contexto.lineWidth = 4
-            
-         contexto.fillStyle = "red";
-         contexto.fillRect(40,70,15,15); 
-         contexto.strokeRect(40,70,15,15)
-         contexto.lineWidth = 4
+        function desenhaAzul(contexto){    
         
+         contexto.fillStyle = "blue";
+         contexto.fillRect(azul.x,azul.y,15,15);
+         contexto.lineWidth = 2
+         contexto.strokeRect(azul.x,azul.y,15,15);
+         
+        }
+            
+        function desenhaVermelho(contexto){    
+        
+         contexto.fillStyle = "red";
+         contexto.fillRect(60,50,15,15); 
+         contexto.lineWidth = 2
+         contexto.strokeRect(60,50,15,15)
+         
+        }
+            
         </script>
     </body>
 </html>
