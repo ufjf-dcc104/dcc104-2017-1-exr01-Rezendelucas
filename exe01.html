@@ -3,6 +3,7 @@
     <head>
        <meta charset="utf-8">
         <title>DCC104 - Exemplo 01</title>
+        <script src="Sprite.js" charset="utf-8"></script>
     </head>
     <body>
         <h1>DCC104 - Exemplo 01</h1>
@@ -11,16 +12,20 @@
         var eCanvas = document.getElementsByTagName("canvas")[0]; 
         var contexto = eCanvas.getContext("2d");
              
-        var azul = {
-            x:0,
-            y:50
-        };
+        
             
         var fps = 30;
         var atual = new Date();
         var anterior = new Date();    
         var dt = 1/fps;    
     
+        var azul = new Sprite();   
+        var vermelho = new Sprite();
+            
+        vermelho.x = 20;
+        vermelho.y = 50;
+        vermelho.color = "red";    
+            
         desenha();    
             
         function desenha(){
@@ -29,12 +34,35 @@
         dt  = (atual - anterior)/1000;   
         contexto.clearRect(0,0,eCanvas.width,eCanvas.height)
         contexto.fillText("DT: "+ dt + "    FPS: " + Math.floor(1/dt),10,30);
-        azul.x = azul.x + 20 * dt;
-        azul.y = azul.y + 20 * dt;    
-        desenhaAzul(contexto);
-        desenhaVermelho(contexto);
+            
+        azul.mover(dt);  
+        vermelho.mover(dt);    
+        azul.desenhar(contexto);
+        vermelho.desenhar(contexto);
+        
+            
         anterior = atual;
         }    
+        
+        addEventListener("keydown",function(e){
+           console.log(e.keyCode);
+            switch(e.keyCode){
+                case 37:
+                    azul.vx = -100;
+                    break;
+                case 38:
+                    azul.vy = -100;
+                    break;
+                case 39:
+                    azul.vx = 100;
+                    break;
+                case 40:
+                    azul.vy = 100;
+                    break;
+                default:
+                         }
+        });
+            
             
         function desenhaAzul(contexto){    
         
