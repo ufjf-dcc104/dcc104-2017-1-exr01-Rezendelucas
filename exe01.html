@@ -19,13 +19,15 @@
         var anterior = new Date();    
         var dt = 1/fps;    
     
+        var fuel = 100;  
+        var acelerandox = false; 
+        var acelerandoy = false;    
         var azul = new Sprite();   
-        var vermelho = new Sprite();
-            
+        var vermelho = new Sprite();  
         vermelho.x = 20;
         vermelho.y = 50;
         vermelho.color = "red";    
-            
+    
         desenha();    
             
         function desenha(){
@@ -35,29 +37,77 @@
         contexto.clearRect(0,0,eCanvas.width,eCanvas.height)
         contexto.fillText("DT: "+ dt + "    FPS: " + Math.floor(1/dt),10,30);
             
+        contexto.fillStyle = "green";    
+        contexto.fillRect(20,40,fuel,5);
+        contexto.fillRect(20,40,fuel,5);
+            
+        if(acelerandox && fuel > 0){
+         fuel = fuel - 5*dt;
+        } 
+         if(acelerandoy && fuel > 0){
+         fuel = fuel - 15*dt;
+        } 
+            
+   
         azul.mover(dt);  
         vermelho.mover(dt);    
         azul.desenhar(contexto);
         vermelho.desenhar(contexto);
         
+        if(azul.y >150){
+         azul.y = 0;
+         azul.vy = 0;
+         azul.ay = 0;
+         azul.x = 150;
+         fuel =100;
+        }    
             
         anterior = atual;
         }    
         
         addEventListener("keydown",function(e){
            console.log(e.keyCode);
+            if(fuel <= 0 )
+                return
             switch(e.keyCode){
                 case 37:
-                    azul.vx = -100;
+                    azul.ax = -100;
+                    acelerandox = true;
                     break;
                 case 38:
-                    azul.vy = -100;
+                    azul.ay = -100;
+                    acelerandoy = true;
                     break;
                 case 39:
-                    azul.vx = 100;
+                    azul.ax = 100;
+                    acelerandox = true;
                     break;
                 case 40:
-                    azul.vy = 100;
+                    azul.ay = 100;
+                    acelerandoy = true;
+                    break;
+                default:
+                         }
+        });
+            
+        addEventListener("keyup",function(e){
+           console.log(e.keyCode);
+            switch(e.keyCode){
+                case 37:
+                    azul.ax = 0;
+                    acelerandox = false;
+                    break;
+                case 38:
+                    azul.ay = 0;
+                    acelerandoy = false;
+                    break;
+                case 39:
+                    azul.ax = 0;
+                    acelerandox = false;
+                    break;
+                case 40:
+                    azul.ay = 0;
+                    acelerandoy = false;
                     break;
                 default:
                          }
