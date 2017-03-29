@@ -7,26 +7,29 @@
     </head>
     <body>
         <h1>DCC104 - Exemplo 01</h1>
-        <canvas></canvas>
+        <canvas id="myCanvas" width="500" height="800"></canvas>
+		<img id="imgLig" src="fogueteLigado.png" style="display:none"/>
+		<img id="imgDes" src="fogueteDesligado.png" style="display:none"/>
         <script>
-        var eCanvas = document.getElementsByTagName("canvas")[0]; 
+        var eCanvas = document.getElementsByTagName("canvas")[0];
         var contexto = eCanvas.getContext("2d");
-             
-        
-            
-        var fps = 30;
+		
+		var imgLig = document.getElementById("imgLig");
+		var imgDes = document.getElementById("imgDes");
+		 
+	            
+        var fps = 120;
         var atual = new Date();
         var anterior = new Date();    
         var dt = 1/fps;    
     
-        var fuel = 100;  
+        var fuel = 200;  
         var acelerandox = false; 
-        var acelerandoy = false;    
-        var azul = new Sprite();   
-        var vermelho = new Sprite();  
-        vermelho.x = 20;
-        vermelho.y = 50;
-        vermelho.color = "red";    
+        var acelerandoy = false; 
+		
+        var azul = new Sprite(250,20,"Blue",imgLig,imgDes);   
+        var solo = new Sprite(5,710,"green");
+        var combustivel = new Sprite(20,550,"green");		
     
         desenha();    
             
@@ -35,33 +38,20 @@
         atual = new Date();
         dt  = (atual - anterior)/1000;   
         contexto.clearRect(0,0,eCanvas.width,eCanvas.height)
+		contexto.strokeRect(5,5,eCanvas.width-5,eCanvas.height-5);
         contexto.fillText("DT: "+ dt + "    FPS: " + Math.floor(1/dt),10,30);
             
-        contexto.fillStyle = "green";    
-        contexto.fillRect(20,40,fuel,5);
-        contexto.fillRect(20,40,fuel,5);
-            
-        if(acelerandox && fuel > 0){
-         fuel = fuel - 5*dt;
-        } 
-         if(acelerandoy && fuel > 0){
-         fuel = fuel - 15*dt;
-        } 
-            
+		contexto.fillText("Velocidade: " + Math.floor(azul.vy) + " m/s",180,500);	
+        combustivel.controlaCombustivel(contexto,fuel);  
+        gastoCombustivel();		
    
         azul.mover(dt);  
-        vermelho.mover(dt);    
-        azul.desenhar(contexto);
-        vermelho.desenhar(contexto);
+		azul.colisaoSolo(dt); 
+        azul.colisaoCanto(dt);    
+		solo.desenharSolo(contexto);
+        azul.desenhar(contexto,acelerandox,acelerandoy);
         
-        if(azul.y >150){
-         azul.y = 0;
-         azul.vy = 0;
-         azul.ay = 0;
-         azul.x = 150;
-         fuel =100;
-        }    
-            
+    
         anterior = atual;
         }    
         
@@ -112,26 +102,16 @@
                 default:
                          }
         });
-            
-            
-        function desenhaAzul(contexto){    
-        
-         contexto.fillStyle = "blue";
-         contexto.fillRect(azul.x,azul.y,15,15);
-         contexto.lineWidth = 2
-         contexto.strokeRect(azul.x,azul.y,15,15);
-         
-        }
-            
-        function desenhaVermelho(contexto){    
-        
-         contexto.fillStyle = "red";
-         contexto.fillRect(60,50,15,15); 
-         contexto.lineWidth = 2
-         contexto.strokeRect(60,50,15,15)
-         
-        }
-            
+		
+		function gastoCombustivel(){
+		  if(acelerandox && fuel > 0){
+          fuel = fuel - 5*dt;
+          } 
+          if(acelerandoy && fuel > 0){
+          fuel = fuel - 15*dt;
+          } 
+		}
+		
         </script>
     </body>
 </html>
